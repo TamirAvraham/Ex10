@@ -8,6 +8,10 @@ Customer::Customer():_name()
 {
 }
 
+Customer::~Customer()
+{
+}
+
 double Customer::shoppingCartSum(std::string shoppingCartName)
 {
 	double sum = 0.0;
@@ -36,11 +40,14 @@ void Customer::createNewShoppingCart(std::string shoppingCartName)
 
 void Customer::addItem(Item item, std::string shoppingCartName)
 {
-	auto cart = _shoppingCarts[shoppingCartName];
-	for (Item& itemInCart : *cart) {
+	auto cart = _shoppingCarts.at(shoppingCartName);
+	for (Item itemInCart : *cart) {
 		if (item==itemInCart)
 		{
-			itemInCart.setCount(item.getCount()+1);
+			item = itemInCart;
+			Item newItem = item;
+			newItem.setCount(newItem.getCount() + 1);
+			updateItemInSet(cart, item, newItem);
 			return;
 		}
 	}
@@ -49,16 +56,43 @@ void Customer::addItem(Item item, std::string shoppingCartName)
 
 void Customer::removeItem(Item item, std::string shoppingCartName)
 {
-	auto cart = _shoppingCarts[shoppingCartName];
-	for (Item& itemInCart : *cart) {
+	auto cart = _shoppingCarts.at(shoppingCartName);
+	for (Item itemInCart : *cart) {
 		if (item == itemInCart)
 		{
-			if (item.getCount()==0)
+			item = itemInCart;
+			if (item.getCount()<=1)
 			{
-				cart->swap()
+				cart->erase(item);
+				return;
 			}
+			Item newItem = item;
+			newItem.setCount(newItem.getCount() - 1);
+			updateItemInSet(cart, item, newItem);
 			return;
 		}
 	}
 	cart->insert(item);
+}
+
+std::string Customer::getName()
+{
+	return _name;
+}
+
+std::set<Item>* Customer::getShoppingCart(std::string shoppingCartName)
+{
+	return _shoppingCarts.at(shoppingCartName);
+}
+
+void Customer::updateItemInSet(std::set<Item>* set, Item toUpdate, Item newItem)
+{
+	auto iterator = set->find(toUpdate);
+	if (iterator!=set->end())
+	{
+		std::set<Item>::iterator iteratorToNewItem = iterator;
+		iteratorToNewItem++;
+		set->erase(iterator);
+		set->insert(iteratorToNewItem, newItem);
+	}
 }

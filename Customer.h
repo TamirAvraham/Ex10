@@ -32,5 +32,6 @@ private:
 	std::string _name; // Customer name
 	std::map<std::string, std::set<Item>*> _shoppingCarts; // Shopping carts
 
+	void updateItemInSet(std::set<Item>* set, Item toUpdate, Item newItem);
 
 };

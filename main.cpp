@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "Store.h"
+#include "Customer.h"
 
 using std::cout;
 using std::endl;
@@ -45,6 +46,16 @@ std::string getItemString(const Item& item)
         ", Amount: " + std::to_string(item.getCount()) + "]";
 }
 
+std::string getShoppingCartString(std::set<Item>* shoppingCart, const std::string shoppingCartName)
+{
+    std::string result = "Items in shopping cart: " + shoppingCartName + "\n";
+    for (auto it = shoppingCart->begin(); it != shoppingCart->end(); it++)
+    {
+        result += getItemString(*it) + "\n";
+    }
+    return result;
+}
+
 std::string readFileToString(const std::string fileName)
 {
     std::ifstream inFile;
@@ -57,201 +68,233 @@ std::string readFileToString(const std::string fileName)
     return str;
 }
 
-bool test2Store()
+
+
+bool test3Customer()
 {
     bool result = false;
 
     try
     {
-        // Tests Ex10 part 2 - Store
+        // Tests Ex10 part 3 - Customer
 
         set_console_color(PURPLE);
         cout <<
             "*******************\n" <<
-            "Test 2 - Store				\n" <<
+            "Test 3 - Customer	\n" <<
             "*******************\n" << endl;
 
         set_console_color(WHITE);
 
 
-        ///////////////////////////
-        // Checking Sort Methods //
-        ///////////////////////////
         cout <<
-            "Initializing Store1(\"MagshIKEA\", \"InventoryIKEA.csv\"): ... \n" << endl;
-        Store s1("IKEA", "InventoryIKEA.csv");
+            "Initializing 2 stores\n" <<
+            "Store1(\"MagshIKEA\", \"InventoryIKEA.csv\"): ... \n" <<
+            "Store2(\"Shefa Isaschar\", \"InventorySuperMarket.csv\"): ... \n" << endl;
 
-        cout <<
-            "\nSorting store items by Name: ... \n" << endl;
-
-        std::string expected = readFileToString("output1a.txt");
-        std::string got = s1.getSortedProductList(NAME);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
-            return false;
-            set_console_color(WHITE);
-        }
-
-        cout <<
-            "\nSorting store items by Price: ... \n" << endl;
-
-        expected = readFileToString("output1b.txt");
-        got = s1.getSortedProductList(PRICE);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
-            return false;
-            set_console_color(WHITE);
-        }
-
-        cout <<
-            "\nSorting store items by Serial Number: ... \n" << endl;
-
-        expected = readFileToString("output1c.txt");
-        got = s1.getSortedProductList(SERIAL);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
-            return false;
-            set_console_color(WHITE);
-        }
-
-        cout <<
-            "Initializing Store2(\"Shefa Isaschar\", \"InventorySuperMarket.csv\"): ... \n" << endl;
+        Store s1("MagshIKEA", "InventoryIKEA.csv");
         Store s2("Shefa Isaschar", "InventorySuperMarket.csv");
 
         cout <<
-            "\nSorting store items by Name: ... \n" << endl;
+            "\nInitializing customer c1(\"Moti Vazia\": ... \n" << endl;
 
-        expected = readFileToString("output2a.txt");
-        got = s2.getSortedProductList(NAME);
+        Customer c1("Moti Vazia");
+
+        set_console_color(GREEN);
+        cout << "OK" << std::endl;
+        set_console_color(WHITE);
+
+        const std::string shoppingCart1Name = "HomeStuff";
+
+        cout <<
+            "\nCreating a new shopping cart for the customer - c1.createNewShoppingCart(\"HomeStuff\"): ... \n" << endl;
+        c1.createNewShoppingCart(shoppingCart1Name);
+
+        cout <<
+            "\nadding the following items from store 1: ... \n" <<
+            "item #11 - Wooden Chair X 4\n" <<
+            "item #12 - Bar Chair X 4\n" <<
+            "item #21 - OfficeDesk X 1\n" << endl;
+
+        c1.addItem(s1[11], shoppingCart1Name);
+        c1.addItem(s1[11], shoppingCart1Name);
+        c1.addItem(s1[11], shoppingCart1Name);
+        c1.addItem(s1[11], shoppingCart1Name);
+
+        c1.addItem(s1[12], shoppingCart1Name);
+        c1.addItem(s1[12], shoppingCart1Name);
+        c1.addItem(s1[12], shoppingCart1Name);
+        c1.addItem(s1[12], shoppingCart1Name);
+
+        c1.addItem(s1[21], shoppingCart1Name);
+
+        cout <<
+            "\nPrinting shopping basket customer \"" << shoppingCart1Name << "\" ... \n" << endl;
+        std::set<Item>* shoppingCart1 = c1.getShoppingCart(shoppingCart1Name);
+
+        std::string expected = readFileToString("outputPart31a.txt");
+        std::string got = getShoppingCartString(c1.getShoppingCart(shoppingCart1Name), shoppingCart1Name);
         cout << "Expected:\n" << expected << endl;
         cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check functions Customer::getShoppingCart(string), addItem(Item, string) \n";
             return false;
             set_console_color(WHITE);
         }
 
-        cout <<
-            "\nSorting store items by Category: ... \n" << endl;
+        const std::string shoppingCart2Name = "Groceries";
 
-        expected = readFileToString("output2b.txt");
-        got = s2.getSortedProductList(CATEGORY);
+        cout <<
+            "\nCreating a new shopping cart for the customer - c1.createNewShoppingCart(\"Groceries\"): ... \n" << endl;
+        c1.createNewShoppingCart(shoppingCart2Name);
+
+        cout <<
+            "\nadding the following items from store 2: ... \n" <<
+            "item #02 - Milk 3% 1 liter X 2\n" <<
+            "item #21 - Mineral Water 6 pack X 1\n" <<
+            "item #24 - Olive Oil 750ml X 1\n" <<
+            "item #11 - Tomato 0.5 kg X 3\n" <<
+            "item #12 - Carrot 0.5 kg X 1\n" <<
+            "item #15 - Red Onion 0.5 kg X 1\n" <<
+            "item #06 - Butter 100g X 2\n" <<
+            "item #09 - Eggs size Large X 2\n" <<
+            "item #20 - Pasta 1kg X 4\n" << endl;
+
+        c1.addItem(s2[2], shoppingCart2Name);
+        c1.addItem(s2[2], shoppingCart2Name);
+
+        c1.addItem(s2[21], shoppingCart2Name);
+
+        c1.addItem(s2[24], shoppingCart2Name);
+
+        c1.addItem(s2[11], shoppingCart2Name);
+        c1.addItem(s2[11], shoppingCart2Name);
+        c1.addItem(s2[11], shoppingCart2Name);
+
+        c1.addItem(s2[12], shoppingCart2Name);
+
+        c1.addItem(s2[15], shoppingCart2Name);
+
+        c1.addItem(s2[6], shoppingCart2Name);
+        c1.addItem(s2[6], shoppingCart2Name);
+
+        c1.addItem(s2[9], shoppingCart2Name);
+        c1.addItem(s2[9], shoppingCart2Name);
+
+        c1.addItem(s2[20], shoppingCart2Name);
+        c1.addItem(s2[20], shoppingCart2Name);
+        c1.addItem(s2[20], shoppingCart2Name);
+        c1.addItem(s2[20], shoppingCart2Name);
+
+        cout <<
+            "\nPrinting shopping cart customer \"" << shoppingCart2Name << "\" ... \n" << endl;
+        std::set<Item>* shoppingCart2 = c1.getShoppingCart(shoppingCart2Name);
+
+        expected = readFileToString("outputPart31b.txt");
+        got = getShoppingCartString(c1.getShoppingCart(shoppingCart2Name), shoppingCart2Name);
         cout << "Expected:\n" << expected << endl;
         cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check functions Customer::getShoppingCart(string), addItem(Item, string) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "Initializing Store3(\"MagshiPharm\", \"InventoryPharm.csv\"): ... \n" << endl;
-        Store s3("MagshiPharm", "InventoryPharm.csv");
+            "\nremoving the following items from shopping basket \"Groceries\": ... \n" <<
+            "item #11 - Tomato 0.5 kg X 2\n" <<
+            "item #12 - Carrot 0.5 kg X 1\n" <<
+            "item #06 - Butter 100g X 2\n" <<
+            "item #09 - Eggs size Large X 1\n" <<
+            "item #20 - Pasta 1kg X 1\n" << endl;
+
+        c1.removeItem(s2[11], shoppingCart2Name);
+        c1.removeItem(s2[11], shoppingCart2Name);
+        c1.removeItem(s2[11], shoppingCart2Name);
+
+        c1.removeItem(s2[15], shoppingCart2Name);
+
+        c1.removeItem(s2[6], shoppingCart2Name);
+        c1.removeItem(s2[6], shoppingCart2Name);
+
+        c1.removeItem(s2[9], shoppingCart2Name);
+
+        c1.removeItem(s2[20], shoppingCart2Name);
 
         cout <<
-            "\nSorting store items by Name: ... \n" << endl;
+            "\nPrinting shopping cart customer \"" << shoppingCart2Name << "\" ... \n" << endl;
 
-        expected = readFileToString("output3a.txt");
-        got = s3.getSortedProductList(NAME);
+        expected = readFileToString("outputPart31c.txt");
+        got = getShoppingCartString(c1.getShoppingCart(shoppingCart2Name), shoppingCart2Name);
         cout << "Expected:\n" << expected << endl;
         cout << "Got     :\n" << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check functions Customer::getShoppingCart(string), removeItem(Item, string) \n";
+            return false;
+            set_console_color(WHITE);
+        }
+
+        ////////////////////////////
+        // Checking Sum functions //
+        ////////////////////////////
+        cout <<
+            "\nPrinting shopping cart sum \"" << shoppingCart1Name << "\" ... \n" << endl;
+
+        expected = "3598.000000";
+        got = std::to_string(c1.shoppingCartSum(shoppingCart1Name));
+
+        cout << "Expected: " << expected << endl;
+        cout << "Got     : " << got << std::endl;
+        if (got != expected)
+        {
+            set_console_color(RED);
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check function Customer::shoppingCartSum(string) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nSorting store items by Category: ... \n" << endl;
+            "\nPrinting shopping cart sum \"" << shoppingCart2Name << "\" ... \n" << endl;
+        expected = "97.808000";
+        got = std::to_string(c1.shoppingCartSum(shoppingCart2Name));
 
-        expected = readFileToString("output3b.txt");
-        got = s3.getSortedProductList(CATEGORY);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
+        cout << "Expected: " << expected << endl;
+        cout << "Got     : " << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check Store Constructor and functions Store::getSortedProductList(SortingCriteria) \n";
-            return false;
-            set_console_color(WHITE);
-        }
-
-        //////////////////////////////
-        // Checking Filter Methods  //
-        //////////////////////////////
-
-        cout <<
-            "\nFiltering store items by Category = FOOD: ... \n" << endl;
-
-        expected = readFileToString("output3c.txt");
-        got = s3.getProductListFilteredByCategory(FOOD);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check function Customer::shoppingCartSum(string) \n";
             return false;
             set_console_color(WHITE);
         }
 
         cout <<
-            "\nFiltering store items by Category = CLEANING: ... \n" << endl;
+            "\nPrinting total sum for the customer ... \n" << endl;
+        expected = "3695.808000";
+        got = std::to_string(c1.totalSum());
 
-        expected = readFileToString("output3d.txt");
-        got = s3.getProductListFilteredByCategory(CLEANING);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
+        cout << "Expected: " << expected << endl;
+        cout << "Got     : " << got << std::endl;
         if (got != expected)
         {
             set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
+            std::cout << "FAILED: Customer information is not as expected\n" <<
+                "check function Customer::totalSum() \n";
             return false;
             set_console_color(WHITE);
         }
 
-        cout <<
-            "\nFiltering store items by Category = PHARM: ... \n" << endl;
-
-        expected = readFileToString("output3e.txt");
-        got = s3.getProductListFilteredByCategory(PHARM);
-        cout << "Expected:\n" << expected << endl;
-        cout << "Got     :\n" << got << std::endl;
-        if (got != expected)
-        {
-            set_console_color(RED);
-            std::cout << "FAILED: Store information is not as expected\n" <<
-                "check function Store::getProductListFilteredByCategory(ItemCategory) \n";
-            return false;
-            set_console_color(WHITE);
-        }
     }
     catch (...)
     {
@@ -264,7 +307,7 @@ bool test2Store()
     }
 
     set_console_color(LIGHT_GREEN);
-    std::cout << "\n########## Store - TEST Passed!!! ##########\n\n";
+    std::cout << "\n########## Customer - TEST Passed!!! ##########\n\n";
     set_console_color(WHITE);
 
     return true;
@@ -273,20 +316,20 @@ bool test2Store()
 
 int main()
 {
-    set_console_color(LIGHT_YELLOW);
+    set_console_color(LIGHT_BLUE);
     std::cout <<
         "###########################\n" <<
         "Exercise 10 - Magshistore\n" <<
-        "Part 2 - Store\n" <<
+        "Part 3 - Customer\n" <<
         "###########################\n" << std::endl;
     set_console_color(WHITE);
 
-    bool testResult = test2Store();
+    bool testResult = test3Customer();
 
     if (testResult)
     {
         set_console_color(GREEN);
-        std::cout << "\n########## Ex10 Part2 Tests Passed!!! ##########" << "\n\n";
+        std::cout << "\n########## Ex10 Part3 Tests Passed!!! ##########" << "\n\n";
         set_console_color(WHITE);
     }
     else
