@@ -18,6 +18,8 @@ public:
 	double shoppingCartSum(std::string shoppingCartName); // returns the payment sum for a given shopping cart;
 	double totalSum();//returns the total sum for payment
 
+	void createNewShoppingCart(std::string shoppingCartName);
+
 	void addItem(Item, std::string shoppingCartName);//add item to the set
 	void removeItem(Item, std::string shoppingCartName);//remove item from the set
 
