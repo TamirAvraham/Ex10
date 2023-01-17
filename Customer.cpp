@@ -12,10 +12,10 @@ Customer::~Customer()
 {
 }
 
-double Customer::shoppingCartSum(std::string shoppingCartName)
+double Customer::shoppingCartSum(std::string shoppingCartName) const
 {
 	double sum = 0.0;
-	auto cart = _shoppingCarts[shoppingCartName];
+	auto cart = _shoppingCarts.at(shoppingCartName);
 	for (auto item : *cart) {
 		sum += item.totalPrice();
 	}
@@ -75,7 +75,7 @@ void Customer::removeItem(Item item, std::string shoppingCartName)
 	cart->insert(item);
 }
 
-std::string Customer::getName()
+std::string Customer::getName() const
 {
 	return _name;
 }
@@ -95,4 +95,8 @@ void Customer::updateItemInSet(std::set<Item>* set, Item toUpdate, Item newItem)
 		set->erase(iterator);
 		set->insert(iteratorToNewItem, newItem);
 	}
+
+}
+std::map<std::string, std::set<Item>*> Customer::getCarts() const {
+	return _shoppingCarts;
 }

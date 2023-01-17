@@ -15,7 +15,7 @@ public:
 	
 	// methods
 	
-	double shoppingCartSum(std::string shoppingCartName); // returns the payment sum for a given shopping cart;
+	double shoppingCartSum(std::string shoppingCartName)const; // returns the payment sum for a given shopping cart;
 	double totalSum();//returns the total sum for payment
 
 	void createNewShoppingCart(std::string shoppingCartName);
@@ -25,9 +25,10 @@ public:
 
 	//get and set functions
 
-	std::string getName();	// returns the customer name
-	std::set<Item>* getShoppingCart(std::string shoppingCartName) ; // returns the shopping cart with the given name
-
+	std::string getName()const;	// returns the customer name
+	std::set<Item>* getShoppingCart(std::string shoppingCartName); // returns the shopping cart with the given name
+	
+	std::map<std::string, std::set<Item>*> getCarts()const;
 private:
 	std::string _name; // Customer name
 	std::map<std::string, std::set<Item>*> _shoppingCarts; // Shopping carts
