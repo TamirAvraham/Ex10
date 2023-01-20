@@ -34,8 +34,7 @@ double Customer::totalSum()
 void Customer::createNewShoppingCart(std::string shoppingCartName)
 {
 	std::set<Item>* set=new std::set<Item>();
-	std::pair<std::string, std::set<Item>*> inserted(shoppingCartName, set);
-	_shoppingCarts.insert(inserted);
+	_shoppingCarts.insert({ shoppingCartName, set });
 }
 
 void Customer::addItem(Item item, std::string shoppingCartName)

@@ -58,10 +58,12 @@ void option1selectShop(Customer& customer, std::string cartName) {
 void option1(Customer& customer) 
 {
 	std::string text="1. To create a new shopping cart\n2. Back to main menu";
+	print(text);
 	int option = getOption();
 	switch (option)
 	{
 	case 1:
+		print("enter the name of the shopping cart")
 		std::getline(std::cin, text);//reduce reuse recycle thats how you get quick programs
 		customer.createNewShoppingCart(text);
 		option1selectShop(customer, text);
@@ -93,7 +95,7 @@ void option2pickCart(Customer& customer) {
 }
 void option2(Customer& customer) {
 	std::string printText = "1. To create a new shopping cart\n2. Update existing shopping cart\n2. Back to main menu";
-	print(printText)
+	print(printText);
 	int option = getOption();
 	switch (option)
 	{
@@ -104,16 +106,14 @@ void option2(Customer& customer) {
 		customer.createNewShoppingCart(printText);
 		option1selectShop(customer, printText);
 	case 2:
+		option2pickCart(customer);
 		break;
 	default:
 		print("rerouting back to main menu")
 		break;
 	}
 }
-Customer& GetCustomer(std::map<std::string, Customer>& customers) {
-	std::string name = "";
-	print("enter your name");
-	input(name)
+Customer GetCustomer(std::map<std::string, Customer>& customers,std::string name) {
 	Customer ret(name);
 	customers.insert({ name,ret });
 	return ret;
@@ -129,18 +129,27 @@ int main()
 	int option = 0;
 	double max = -100000000000;
 	std::string nameOfShame = "tamir";
+	
+
 	do
 	{
+		print(textForFirstPrint);
 		option = getOption();
 		switch (option)
 		{
 		case 1:
-			option1(GetCustomer(abcCustomers)); \
+			print("enter your name")
+			input(nameOfShame)
+			GetCustomer(abcCustomers,nameOfShame);
+			option1(abcCustomers.at(nameOfShame));
 			break;
 		case 2:
-			option2(GetCustomer(abcCustomers));
+			print("enter your name")
+			input(nameOfShame)
+			option2(abcCustomers.at(nameOfShame));
 			break;
 		case 3:
+			max = 0;
 			for (auto& pair:abcCustomers)
 			{
 				auto sum = pair.second.totalSum();
